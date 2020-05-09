@@ -1,67 +1,114 @@
 version: "3"
 
 # ATTENTION : Pensez a modifier les droits des dossiers Volumes sur l'host
-# To commentdecomment on Notepad++, use Ctrl + K
+# To commentdecomment on Notepad++, use Ctrl+K / Ctrk+Q
+# Alt + 3 repli les sections
  
+###########################################################################
+# Version scale avec nodered (15 max) / influxdb(1) / grafana (15 max)
+# docker-compose up -d --scale grafana=3 --scale nodered=3 --scale influxdb=1
+###########################################################################
 services:
-# Volumes Node-Red : Chaque groupe possede son propre volume dataX_nod
-
-  nodered1:
+  nodered:
     build: ./nodered-rpi
     networks:
       - workshopLora
     ports:
-      - "1880:1880"
-    volumes:
-      - ./data/data1_nodered:/data 
+      - "1880-1894:1880"
     restart: on-failure
   
-  nodered2:
-    build: ./nodered-rpi
-    networks:
-      - workshopLora
-    ports:
-      - "1881:1880"
-    volumes:
-      - ./data/data2_nodered:/data 
-    restart: on-failure  
-    
+     
   influxdb:
     image: "influxdb"
     networks:
       - workshopLora
     ports:
       - "8086:8086"
-    volumes:
-      - ./data/data_influxdb:/var/lib/influxdb
-      #- ./influx_init:/home
     environment:
-      - INFLUXDB_DB=onebee1
+      - INFLUXDB_DB=onebee
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=,;:!jklm
+    restart: on-failure
+
+  grafana:
+    image: "grafana/grafana"
+    networks:
+      - workshopLora
+    ports:
+      - "3000-3014:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=,;:!jklm
+      #- GF_AUTH_ANONYMOUS_ENABLE=true
+      #- GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      #- GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      #- GF_AUTH_BASIC.ENABLE=fasle
+      #- GF_AUTH_DISABLE_LOGIN_FORM=true
       
-      #- INFLUXDB_HTTP_AUTH_ENABLED=true
-      #- INFLUXDB_ADMIN_USER=admin
-      #- INFLUXDB_ADMIN_PASSWORD=admin
     restart: on-failure
+    
 
-  grafana1:
-    image: "grafana/grafana"
-    networks:
-      - workshopLora
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./data/data1_grafana:/var/lib/grafana
-    restart: on-failure
+###########################################################################
+# Version individuelle avec sauvegarde dans un dossier volume différent
+###########################################################################
+# services:
+  # nodered1:
+    # build: ./nodered-rpi
+    # networks:
+      # - workshopLora
+    # ports:
+      # - "1880:1880"
+    # volumes:
+      # - ./data/data1_nodered:/data 
+    # restart: on-failure
+  
+  # nodered2:
+    # build: ./nodered-rpi
+    # networks:
+      # - workshopLora
+    # ports:
+      # - "1881:1880"
+    # volumes:
+      # - ./data/data2_nodered:/data 
+    # restart: on-failure  
+    
+  # influxdb:
+    # image: "influxdb"
+    # networks:
+      # - workshopLora
+    # ports:
+      # - "8086:8086"
+    # volumes:
+      # - ./data/data_influxdb:/var/lib/influxdb
+      # #- ./influx_init:/home
+    # environment:
+      # - INFLUXDB_DB=onebee
+      
+      # #- INFLUXDB_HTTP_AUTH_ENABLED=true
+      # #- INFLUXDB_ADMIN_USER=admin
+      # #- INFLUXDB_ADMIN_PASSWORD=admin
+    # restart: on-failure
 
-  grafana2:
-    image: "grafana/grafana"
-    networks:
-      - workshopLora
-    ports:
-      - "3001:3000"
-    volumes:
-      - ./data/data2_grafana:/var/lib/grafana
-    restart: on-failure
+  # grafana1:
+    # image: "grafana/grafana"
+    # networks:
+      # - workshopLora
+    # ports:
+      # - "3000:3000"
+    # volumes:
+      # - ./data/data1_grafana:/var/lib/grafana
+    # restart: on-failure
+
+  # grafana2:
+    # image: "grafana/grafana"
+    # networks:
+      # - workshopLora
+    # ports:
+      # - "3001:3000"
+    # volumes:
+      # - ./data/data2_grafana:/var/lib/grafana
+    # restart: on-failure
 
 networks:
   workshopLora:
