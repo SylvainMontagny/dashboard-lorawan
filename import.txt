@@ -1,0 +1,11 @@
+# DDL
+CREATE DATABASE onebee1
+CREATE DATABASE import2
+CREATE DATABASE import3
+
+# DML
+# CONTEXT-DATABASE: onebee1
+temperatures temp=25
+
+# CONTEXT-DATABASE: onebee2
+temperatures temp=25
