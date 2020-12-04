@@ -1,0 +1,65 @@
+# ATTENTION : Pensez a modifier les droits des dossiers Volumes sur l'host
+# To commentdecomment on Notepad++, use Ctrl+K / Ctrk+Q
+# Alt + 3 repli les sections 
+
+###########################################################################
+# Version individuelle avec sauvegarde dans un dossier volume différent
+###########################################################################
+version: "3.5"
+# services:
+  # nodered:
+    # build: ./nodered-rpi-standalone
+    # container_name : nodered
+    # networks:
+      # - LoraNetwork
+    # ports:
+      # - "1880:1880"
+    # # volumes:
+      # # - ./data/nodered:/data 
+    # restart: on-failure
+  
+    
+  telegraf:
+    image: "telegra"
+    container_name: telegraf
+    network:
+      -LoRaNetwork 
+    
+  influxdb:
+    image: "influxdb"
+    container_name: influxdb
+    networks:
+      - LoraNetwork
+    ports:
+      - "8086:8086"
+    # volumes:
+      # - ./data/influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=maBase   
+    restart: on-failure
+
+  grafana:
+    image: "grafana/grafana"
+    container_name : grafana
+    networks:
+      - LoraNetwork
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      #- GF_AUTH_ANONYMOUS_ENABLE=true
+      #- GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      #- GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      #- GF_AUTH_BASIC.ENABLE=fasle
+      #- GF_AUTH_DISABLE_LOGIN_FORM=true
+    # volumes:
+      # - ./data/grafana:/var/lib/grafana
+    restart: on-failure
+
+networks:
+  LoraNetwork: 
+    name: loraNetwork
+
+
+
