@@ -124,10 +124,10 @@ module.exports = {
          type: "credentials",
          users: [{
              username: "admin",
-             password: "$2a$08$/MyN17vT.O2O8Fbboeib1eEvyR8Yv/jbAFKKMo7Sw7tx9Y3MRiHqi",
+             password: "$2a$08$.rk0MoranDlSuPLPx66oneGXhhclRxWU.E1CWQCvdxXConc0Zi6yi",
 
 	     permissions: "*"
-         }]
+       }]
      },
 
     // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
