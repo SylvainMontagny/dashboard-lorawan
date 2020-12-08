@@ -21,7 +21,7 @@ services:
     
   influxdb:
     image: "influxdb"
-    container_name : influxdb
+    container_name: influxdb
     networks:
       - LoraNetwork
     ports:
