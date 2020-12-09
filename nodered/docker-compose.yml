@@ -19,7 +19,7 @@ services:
       - ./nodered-config/settings.js:/data/settings.js  
     restart: on-failure
     
-influxdb:
+  influxdb:
     image: "influxdb"
     container_name: influxdb
     networks:
@@ -31,7 +31,7 @@ influxdb:
     environment:
       - INFLUXDB_DB=maBase 
       - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_ADMIN_PASSWORD=lorawan
     restart: on-failure    
 
 networks:
