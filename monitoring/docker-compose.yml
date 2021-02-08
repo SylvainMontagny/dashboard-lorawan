@@ -57,11 +57,13 @@ services:
       - INFLUXDB_URL=http://influxdb:8086
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=lorawan
+      - HTPASSWD=/etc/chronograf/.htpasswd
     volumes:
       - ./data/chronograf:/var/lib/chronograf
+      - ./.htpasswd:/etc/chronograf/.htpasswd
 networks:
   LoraNetwork: 
     name: loraNetwork
 
-
+      
 
