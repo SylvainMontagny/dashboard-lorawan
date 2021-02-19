@@ -1,6 +1,4 @@
-# WARNING : if using Volumes, you have to modify the folder right on the host.
 # INFORMATION : To commentdecomment on Notepad++, use Ctrl+K / Ctrk+Q
- 
 
 #####################
 # Individual version
@@ -8,7 +6,7 @@
 version: "3.5"
 services:
   telegraf:
-    image: "telegraf"
+    image: "telegraf:1.17.2"
     container_name: telegraf
     networks:
       - LoraNetwork
@@ -17,7 +15,7 @@ services:
     restart: on-failure  
       
   influxdb:
-    image: "influxdb"
+    image: "influxdb:1.8.4"
     container_name: influxdb
     networks:
       - LoraNetwork
@@ -33,7 +31,7 @@ services:
 
 
   grafana:
-    image: "grafana/grafana"
+    image: "grafana/grafana:7.4.2"
     container_name: grafana
     networks:
       - LoraNetwork
@@ -42,12 +40,14 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=lorawan
+      #- GF_INSTALL_PLUGINS=https://github.com/geeks-r-us/mqtt-panel/releases/download/v1.0.7/geeksrus-mqtt-panel-1.0.7.zip;mqtt-panel
+      #- GF_INSTALL_PLUGINS=https://github.com/cloudspout/cloudspout-button-panel/releases/download/7.0.23/cloudspout-button-panel.zip;cloudspout-button-panel
     #volumes:
     # - ./data/grafana:/var/lib/grafana
     restart: on-failure
     
   chronograf:
-    image: "chronograf"
+    image: "chronograf:1.8.8"
     container_name: chronograf
     networks:
       - LoraNetwork    
