@@ -1,10 +1,9 @@
 # INFORMATION : To commentdecomment on Notepad++, use Ctrl+K / Ctrk+Q
 
-#####################
-# Individual version
-#####################
+
 version: "3.5"
 services:
+
   telegraf:
     image: "telegraf:1.17.2"
     container_name: telegraf
@@ -14,6 +13,7 @@ services:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf 
     restart: on-failure  
       
+      
   influxdb:
     image: "influxdb:1.8.4"
     container_name: influxdb
@@ -21,8 +21,8 @@ services:
       - LoraNetwork
     ports:
       - "8086:8086"
-    volumes:
-      - ./data/influxdb:/var/lib/influxdb 
+    #volumes:
+    #  - ./data/influxdb:/var/lib/influxdb 
     environment:
       - INFLUXDB_DB=maBase 
       - INFLUXDB_ADMIN_USER=admin
@@ -30,6 +30,23 @@ services:
     restart: on-failure
 
 
+  chronograf:
+    image: "chronograf:1.8.8"
+    container_name: chronograf
+    networks:
+      - LoraNetwork    
+    ports:
+      - "8888:8888"
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=lorawan
+      - HTPASSWD=/etc/chronograf/.htpasswd
+    volumes:
+    #  - ./data/chronograf:/var/lib/chronograf
+      - ./.htpasswd:/etc/chronograf/.htpasswd
+      
+      
   grafana:
     image: "grafana/grafana:7.4.2"
     container_name: grafana
@@ -46,21 +63,7 @@ services:
     # - ./data/grafana:/var/lib/grafana
     restart: on-failure
     
-  chronograf:
-    image: "chronograf:1.8.8"
-    container_name: chronograf
-    networks:
-      - LoraNetwork    
-    ports:
-      - "8888:8888"
-    environment:
-      - INFLUXDB_URL=http://influxdb:8086
-      - INFLUXDB_USERNAME=admin
-      - INFLUXDB_PASSWORD=lorawan
-      - HTPASSWD=/etc/chronograf/.htpasswd
-    volumes:
-      - ./data/chronograf:/var/lib/chronograf
-      - ./.htpasswd:/etc/chronograf/.htpasswd
+  
 networks:
   LoraNetwork: 
     name: loraNetwork
