@@ -15,7 +15,9 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - ./data/nodered/:/data 
+      # If you want to activate nodered volume, you need to change ownership to data folder
+      # by using : sudo chown -R 1000:1000 data/nodered/
+      #- ./data/nodered/:/data 
       - ./nodered-config/settings.js:/data/settings.js  
     restart: on-failure
     
@@ -26,8 +28,9 @@ services:
       - LoraNetwork
     ports:
       - "8086:8086"
-    volumes:
-      - ./data/influxdb/:/var/lib/influxdb 
+    # Uncomment to activate Volume fo InfluxDB
+    #volumes:
+    #  - ./data/influxdb/:/var/lib/influxdb 
     environment:
       - INFLUXDB_DB=maBase 
       - INFLUXDB_ADMIN_USER=admin
