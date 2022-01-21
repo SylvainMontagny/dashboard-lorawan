@@ -1,6 +1,5 @@
 
-FROM nodered/node-red:1.2.9
+FROM nodered/node-red:2.1.6
 RUN npm install node-red-dashboard \
-    npm install node-red-contrib-influxdb \
-    npm install node-red-contrib-ttn
+    npm install node-red-contrib-influxdb
 #COPY settings.js /data/settings.js
